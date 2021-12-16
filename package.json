@@ -1,0 +1,19 @@
+{
+  "name": "supplier-portal-api",
+  "version": "1.0.0",
+  "description": "API for supplier maintenance jobs",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
+  "author": "Richard Griffiths",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
