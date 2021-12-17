@@ -1,37 +1,32 @@
+const jobData = require('../data/jobs')
 
-const uploadJobs = async (req, res) => {
-    const jobUploads = req.body
-    const errors = []
-    const jobsCreated = 0
-
-    if(jobUploads.length > 0) {
-        jobUploads.map(job => {
-            // Check for job ref
-            // Check for supplier id
-            let newJob = {
-                jobRef: job.jobRef,
-                supplier: job.supplier,
-                details: job.details
-            }
-            // Create new job into database
-            if (created) {
-                jobsCreated++
-            } else {
-                errors.push({ message: `Could not create record for ${newJob.jobRef}`})
-            }
-        })
-
-        res.status(200).json({
-            status: 200,
-            jobsCreated,
-            errors
-        })
+const createJob = async (req, res) => {
+    try {
+        const data = req.body
+        const created = await jobData.createJob(data)
+        res.send(created)
+    } catch (error) {
+        res.status(400).send(error.message)
     }
-
-    res.status(400).json({
-        message: 'No jobs provided. Please ensure you provide an array of jobs.'
-    })
 }
 
+const createMulitpleJobs = async (req, res) => {
+    const data = req.body
+    if (data.length > 0) {
+        try {
+            const created = await jobData.createMulitpleJobs(data)
+            res.send(created)
+        } catch (error) {
+            res.status(400).send(error.message)
+        }
+    } else {
+        res.status(400).send({ 
+            message: 'You need to provide an array, if you want to upload a single job use "/api/uploads"' 
+        })
+    } 
+}
 
-export { uploadJobs };
+module.exports = {
+    createJob,
+    createMulitpleJobs
+}

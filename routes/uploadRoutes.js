@@ -1,8 +1,12 @@
-import express from 'express'
-import { uploadJobs } from '../controllers/uploadController.js';
-
+const express = require('express')
+const uploadController = require('../controllers/uploadController')
 const router = express.Router()
 
-router.route('/').get().post(uploadJobs)
+const { createJob, createMulitpleJobs } = uploadController
 
-export default router;
+router.post('/', createJob)
+router.post('/multiple', createMulitpleJobs)
+
+module.exports = {
+    routes: router
+}

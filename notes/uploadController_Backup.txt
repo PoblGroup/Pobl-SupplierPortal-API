@@ -1,0 +1,80 @@
+const sql = require('mssql')
+
+
+const getJobs = async (req, res) => {
+    const results = await sql.query`select * from SupplierJobs`
+    res.send(results.recordset)
+}
+
+const uploadJobs = async (req, res) => {
+    const jobUploads = req.body
+    let errors = []
+    let jobs = []
+    let createdJobs = []
+
+    if(jobUploads.length > 0) {
+        jobUploads.map(async job => {
+            // Check for job ref
+            if (job.jobRef === '') {
+                errors.push({ message: `No Job Reference Provided`})
+                return
+            }
+            
+            // Check for supplier id
+            if (job.supplier === '') {
+                errors.push({ message: `No Supplier Provided`})
+                return
+            }
+            
+            // New Job Record
+            let newJob = {
+                jobRef: job.jobRef,
+                supplier: job.supplier,
+                details: JSON.stringify(job.details)
+            }
+
+            jobs.push(newJob)
+        })
+    } else {
+        res.status(400).json({
+            message: 'No jobs provided. Please ensure you provide an array of jobs.'
+        })
+    }
+
+    const table = new sql.Table('SupplierJobs') // or temporary table, e.g. #temptable
+    table.create = false
+    table.columns.add('MaintenanceJobRef', sql.VarChar(50), {nullable: false})
+    table.columns.add('SupplierId', sql.VarChar(50), {nullable: false})
+    table.columns.add('JobDetails', sql.VarChar(500), {nullable: false})
+    jobs.forEach(x => table.rows.add(x.jobRef, x.supplier, x.details));
+
+    const request = new sql.Request()
+    request.bulk(table, (err, result) => {
+        if(err) {
+            res.status(500).json({ message: err})
+        }
+
+        res.status(201).json({
+            result
+        })
+    })
+}
+
+async function CreateSupplierJob(job) {
+    try {
+        const result = await sql.query`
+                INSERT INTO SupplierJobs (MaintenanceJobRef, SupplierId, JobDetails)
+                OUTPUT Inserted.ID, Inserted.MaintenanceJobRef
+                VALUES (${job.jobRef}, ${job.supplier}, ${job.details})
+            `
+        return result.recordset[0]
+    } catch (error) {
+        return error
+    }
+}
+
+
+module.exports = {
+    getJobs, 
+    uploadJobs
+}
