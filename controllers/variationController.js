@@ -23,11 +23,12 @@ const createVariation = async (req, res) => {
         newVariation.CreatedOn = new Date().toISOString().slice(0, 19).replace('T', ' '),
         newVariation.ModifiedOn = new Date().toISOString().slice(0, 19).replace('T', ' ')
         
-        console.log(newVariation)
-        
         const created = await variationData.createVariation(newVariation)
-        res.send(created)
-
+        // res.send(created)
+        res.status(201).json({
+            id: created[0].Id,
+            variation: newVariation
+        })
 
     } catch (error) {
         res.status(400).send(error.message)
