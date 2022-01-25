@@ -1,6 +1,6 @@
 INSERT INTO [dbo].[JobVariation]
            (
-                [JobReference]
+                [JobReference],
                 [DateTime],
                 [SequenceNo],
                 [Action],

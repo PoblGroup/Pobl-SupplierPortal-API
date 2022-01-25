@@ -8,7 +8,7 @@ const createVariation = async (req, res) => {
 
         const newVariation = {
             JobReference: MaintenanceJobVariation.JobReference,
-            DateTime: MaintenanceJobVariation.DateTime,
+            Date: MaintenanceJobVariation.DateTime,
             SequenceNo: MaintenanceJobVariation.SequenceNo,
             Action: MaintenanceJobVariation.Action,
             Product: MaintenanceJobVariation.Product,
@@ -24,8 +24,7 @@ const createVariation = async (req, res) => {
         console.log(newVariation)
         console.log(created)
     } catch (error) {
-        console.log("Oops Error")
-        // res.status(400).send(error.message)
+        res.status(400).send(error.message)
     }
 }
 
