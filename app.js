@@ -4,7 +4,8 @@ const cors = require('cors')
 const path = require('path')
 
 const uploadRoutes = require('./routes/uploadRoutes')
-const jobRoutes = require('./routes/uploadRoutes')
+const jobRoutes = require('./routes/jobRoutes')
+const variationRoutes = require('./routes/variationRoutes')
 
 const app = express();
 
@@ -25,6 +26,7 @@ router.get("/", function (req, res) {
 // Routes
 app.use('/api/uploads', uploadRoutes.routes)
 app.use('/api/jobs', jobRoutes.routes)
+app.use('/api/variations', variationRoutes.routes)
 
 app.listen(config.port, () => console.log(`Server is listening on http://localhost:${config.port}`));
 
