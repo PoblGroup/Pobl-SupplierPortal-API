@@ -15,6 +15,7 @@ const createVariation = async (req, res) => {
             SubLocation: MaintenanceJobVariation.SubLocation,
             Quantity: MaintenanceJobVariation.Quantity,
             JobTotalValue: MaintenanceJobVariation.JobTotalValue,
+            Direction: MaintenanceJobVariation.Direction.toUpperCase(),
             CreatedOn: new Date().toISOString().slice(0, 19).replace('T', ' '),
             ModifiedOn: new Date().toISOString().slice(0, 19).replace('T', ' ')
         } 

@@ -8,6 +8,7 @@ INSERT INTO [dbo].[JobVariation]
                 [SubLocation],
                 [Quantity],
                 [JobTotalValue],
+                [Direction],
                 [CreatedOn],
                 [ModifiedOn]
            )
@@ -21,6 +22,7 @@ VALUES
         @SubLocation,
         @Quantity,
         @JobTotalValue,
+        @Direction,
         @CreatedOn,
         @ModifiedOn
     )

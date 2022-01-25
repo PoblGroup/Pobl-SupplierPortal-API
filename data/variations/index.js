@@ -27,6 +27,7 @@ const createVariation = async (variation) => {
             .input ('SubLocation', sql.NVarChar(250), variation.SubLocation)
             .input ('Quantity', sql.Int, variation.Quantity)
             .input ('JobTotalValue', sql.Decimal, variation.JobTotalValue)
+            .input ('Direction', sql.NChar(1), variation.Direction)
             .input ('CreatedOn', sql.DateTime, new Date(variation.CreatedOn))
             .input ('ModifiedOn', sql.DateTime, new Date(variation.ModifiedOn))
             .query(sqlQueries.createVariation)
