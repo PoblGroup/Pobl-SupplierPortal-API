@@ -6,6 +6,9 @@ const path = require('path')
 const uploadRoutes = require('./routes/uploadRoutes')
 const jobRoutes = require('./routes/jobRoutes')
 const variationRoutes = require('./routes/variationRoutes')
+const stageRoutes = require('./routes/stageRoutes')
+const appointmentRoutes = require('./routes/appointmentRoutes')
+const cancellationRoutes = require('./routes/cancellationRoutes')
 
 const app = express();
 
@@ -27,6 +30,9 @@ router.get("/", function (req, res) {
 app.use('/api/uploads', uploadRoutes.routes)
 app.use('/api/jobs', jobRoutes.routes)
 app.use('/api/variations', variationRoutes.routes)
+app.use('/api/stages', stageRoutes.routes)
+app.use('/api/appointments', appointmentRoutes.routes)
+app.use('/api/cancellations', cancellationRoutes.routes)
 
 app.listen(config.port, () => console.log(`Server is listening on http://localhost:${config.port}`));
 

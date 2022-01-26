@@ -18,7 +18,7 @@ const createVariation = async (req, res) => {
             Direction
         } = req.body
 
-        newVariation.SubLocation = (SubLocation == null) ? null : SubLocation.toUpperCase(),
+        newVariation.SubLocation = (SubLocation == null) ? null : SubLocation,
         newVariation.Direction = (Direction == null) ? "I" : Direction.toUpperCase(),
         newVariation.CreatedOn = new Date().toISOString().slice(0, 19).replace('T', ' '),
         newVariation.ModifiedOn = new Date().toISOString().slice(0, 19).replace('T', ' ')
