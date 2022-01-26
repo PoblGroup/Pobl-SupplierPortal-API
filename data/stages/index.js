@@ -15,8 +15,6 @@ const getStages = async () => {
 }
 
 const createStage = async (stage) => {
-    console.log(stage)
-
     try {
         let pool = await sql.connect(config.sql)
         const sqlQueries = await utils.loadSqlQueries('stages')
