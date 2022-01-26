@@ -38,7 +38,7 @@ app.listen(config.port, () => console.log(`Server is listening on http://localho
 
 
 
-/*
+/* NOTES
     - Ability to upload jobs (Pobl)
     - Supplier to retrieve a list of their jobs
     - Supplier to retrieve a single job

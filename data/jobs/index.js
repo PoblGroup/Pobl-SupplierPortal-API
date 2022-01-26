@@ -14,6 +14,18 @@ const getJobs = async () => {
     }
 }
 
+const getJobByRef = async (jobRef) => {
+    try {
+        let pool = await sql.connect(config.sql)
+        const sqlQueries = await utils.loadSqlQueries('jobs')
+        const list = await pool.request().input('JobRef', jobRef).query(sqlQueries.getJobByRef)
+        return list.recordset
+
+    } catch (error) {
+        return error.message
+    }
+}
+
 const createJob = async (jobData) => {
     try {
         let pool = await sql.connect(config.sql)
@@ -52,5 +64,6 @@ const createMulitpleJobs = async (jobs) => {
 module.exports = {
     getJobs,
     createJob,
-    createMulitpleJobs
+    createMulitpleJobs,
+    getJobByRef
 }

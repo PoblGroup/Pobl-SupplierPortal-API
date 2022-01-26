@@ -5,7 +5,6 @@ const router = express.Router()
 const { createJob, createMulitpleJobs } = uploadController
 
 router.post('/job', createJob)
-// router.post('/variation', createJob)
 router.post('/multiple', createMulitpleJobs)
 
 module.exports = {

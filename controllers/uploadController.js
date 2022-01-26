@@ -2,9 +2,20 @@ const jobData = require('../data/jobs')
 
 const createJob = async (req, res) => {
     try {
-        const data = req.body
-        const created = await jobData.createJob(data)
-        res.send(created)
+        // New Job
+        const newJob = req.body
+
+        // Check to see if JobRef exists
+        const existingJob = await jobData.getJobByRef(newJob.maintenanceJobRef)
+        
+        if(existingJob.length > 0) {
+            res.status(400).json({
+                message: `Job with ${newJob.maintenanceJobRef} already exists`
+            })
+        } else {
+            const created = await jobData.createJob(newJob)
+            res.send(created)
+        }
     } catch (error) {
         res.status(400).send(error.message)
     }
