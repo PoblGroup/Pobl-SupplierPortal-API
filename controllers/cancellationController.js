@@ -1,7 +1,12 @@
 const cancellationData = require('../data/cancellations')
 
 const getCancellations = async (req, res, next ) => {
-    res.json({ message: "Cancellations" })
+    try {
+        const cancellations = await cancellationData.getCancellations();
+        res.send(cancellations)
+    } catch (error) {
+        res.status(400).send(error.message)
+    }
  }
 
  const createCancellation = async (req, res) => {
@@ -19,10 +24,8 @@ const getCancellations = async (req, res, next ) => {
        newCancellation.ModifiedOn = new Date().toISOString().slice(0, 19).replace('T', ' ')
 
        const created = await cancellationData.createCancellation(newCancellation)
-       res.status(201).json({
-           id: created[0].Id,
-           cancellation: newCancellation
-       })
+       
+       res.send(created)
 
    } catch (error) {
        res.status(400).send(error.message)

@@ -24,10 +24,8 @@ const createStage = async (req, res) => {
         newStage.ModifiedOn = new Date().toISOString().slice(0, 19).replace('T', ' ')
 
         const created = await stageData.createStage(newStage)
-        res.status(201).json({
-            id: created[0].Id,
-            stage: newStage
-        })
+
+        res.send(created);
 
     } catch (error) {
         res.status(400).send(error.message)
