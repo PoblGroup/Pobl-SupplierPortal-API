@@ -3,6 +3,7 @@ const config = require('./config.js')
 const cors = require('cors')
 const path = require('path')
 
+const userRoutes = require('./routes/userRoutes')
 const uploadRoutes = require('./routes/uploadRoutes')
 const jobRoutes = require('./routes/jobRoutes')
 const variationRoutes = require('./routes/variationRoutes')
@@ -27,6 +28,7 @@ router.get("/", function (req, res) {
 });
 
 // Routes
+app.use('/api/users', userRoutes.routes)
 app.use('/api/uploads', uploadRoutes.routes)
 app.use('/api/jobs', jobRoutes.routes)
 app.use('/api/variations', variationRoutes.routes)
