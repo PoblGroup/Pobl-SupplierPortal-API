@@ -38,7 +38,7 @@ const getUserByEmail = async (username) => {
         const sqlQueries = await utils.loadSqlQueries('users')
         const list = await pool.request().input('Username', username).query(sqlQueries.getUserByEmail)
 
-        return (list.recordset.length > 0) ? true : false
+        return list.recordset
     } catch (error) {
         return error.message
     }

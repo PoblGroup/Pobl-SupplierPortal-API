@@ -21,7 +21,7 @@ const registerUser = async (req, res) => {
 
     // Check if user already exists
     const user = await userData.getUserByEmail(req.body.Username);
-    if(user) return res.status(400).send('Username already in use.')
+    if(user.length > 0) return res.status(400).send('Username already in use.')
 
     // Hash password with bcrypt
     const salt = await bcrypt.genSalt(10)

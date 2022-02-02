@@ -10,6 +10,7 @@ const variationRoutes = require('./routes/variationRoutes')
 const stageRoutes = require('./routes/stageRoutes')
 const appointmentRoutes = require('./routes/appointmentRoutes')
 const cancellationRoutes = require('./routes/cancellationRoutes')
+const authRoutes = require('./routes/authRoutes.js')
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use('/api/variations', variationRoutes.routes)
 app.use('/api/stages', stageRoutes.routes)
 app.use('/api/appointments', appointmentRoutes.routes)
 app.use('/api/cancellations', cancellationRoutes.routes)
+app.use('/api/auth', authRoutes.routes)
 
 app.listen(config.port, () => console.log(`Server is listening on http://localhost:${config.port}`));
 
