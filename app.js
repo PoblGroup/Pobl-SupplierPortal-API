@@ -3,6 +3,7 @@ const config = require('./config.js')
 const cors = require('cors')
 const path = require('path')
 
+// Route Imports
 const userRoutes = require('./routes/userRoutes')
 const uploadRoutes = require('./routes/uploadRoutes')
 const jobRoutes = require('./routes/jobRoutes')
@@ -14,8 +15,10 @@ const authRoutes = require('./routes/authRoutes.js')
 
 const app = express();
 
-app.use(cors())
 app.use(express.json())
+
+// Allow cors
+app.use(cors())
 
 // Set up router for routes
 const router = express.Router();
@@ -39,14 +42,3 @@ app.use('/api/cancellations', cancellationRoutes.routes)
 app.use('/api/auth', authRoutes.routes)
 
 app.listen(config.port, () => console.log(`Server is listening on http://localhost:${config.port}`));
-
-
-
-/* NOTES
-    - Ability to upload jobs (Pobl)
-    - Supplier to retrieve a list of their jobs
-    - Supplier to retrieve a single job
-    - Supplier to add appointment to job
-    - Supplier to add stage to job
-    - Authenicatation
-*/

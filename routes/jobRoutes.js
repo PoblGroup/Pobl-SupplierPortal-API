@@ -6,7 +6,7 @@ const auth = require('../helpers/verifyToken')
 const { getJobs, getJobByRef } = jobsController
 
 router.get('/', auth, getJobs)
-router.get('/:ref', getJobByRef)
+router.get('/:ref', auth, getJobByRef)
 
 module.exports = {
     routes: router
