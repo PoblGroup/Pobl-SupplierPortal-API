@@ -2,11 +2,11 @@ const utils = require('../utils')
 const config = require('../../config')
 const sql = require('mssql')
 
-const getJobs = async () => {
+const getJobs = async (supplierId) => {
     try {
         let pool = await sql.connect(config.sql)
         const sqlQueries = await utils.loadSqlQueries('jobs')
-        const list = await pool.request().query(sqlQueries.jobsList)
+        const list = await pool.request().input('SupplierId', supplierId).query(sqlQueries.jobsList)
         return list.recordset
 
     } catch (error) {

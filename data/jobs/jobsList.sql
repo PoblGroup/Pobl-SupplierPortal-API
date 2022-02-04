@@ -3,4 +3,5 @@ SELECT [Id]
       ,[SupplierId]
       ,[JobDetails]
 FROM [dbo].[SupplierJobs]
+WHERE SupplierId = @SupplierId
 

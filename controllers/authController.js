@@ -21,7 +21,7 @@ const authorizeUser = async (req, res, next ) => {
     console.log(process.env.JWT_TOKEN_SECRET);
 
     // Generate Auth Token 
-    const token = jwt.sign({ _id: user[0].Id }, process.env.JWT_TOKEN_SECRET)
+    const token = jwt.sign({ _id: user[0].Id, supplierId: user[0].Supplier_Id }, process.env.JWT_TOKEN_SECRET)
     res.header('auth-token', token).send({ "auth-token": token })
 }
  

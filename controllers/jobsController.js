@@ -1,12 +1,13 @@
 const jobData = require('../data/jobs')
 
 const getJobs = async (req, res, next ) => {
-   try {
-       const jobs = await jobData.getJobs();
-       res.send(jobs)
-   } catch (error) {
-       res.status(400).send(error.message)
-   }
+    const { supplierId} = req.user
+    try {
+        const jobs = await jobData.getJobs(supplierId);
+        res.send(jobs)
+    } catch (error) {
+        res.status(400).send(error.message)
+    }
 }
 
 const getJobByRef = async (req, res, next ) => {
