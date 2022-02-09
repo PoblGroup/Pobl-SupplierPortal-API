@@ -24,8 +24,6 @@ const createAppointment = async (appointment) => {
             .input ('Note', sql.NVarChar(250), appointment.Note)
             .input ('SendSMS', sql.Bit, appointment.SendSMS)
             .input ('AppointmentOutcome', sql.NVarChar(250), appointment.AppointmentOutcome)
-            .input ('Outcome', sql.NVarChar(50), appointment.Outcome)
-            .input ('OutcomeNarrative', sql.NVarChar(250), appointment.OutcomeNarrative)
             .input ('ExternalReference', sql.NVarChar(50), appointment.ExternalReference)
             .input ('CreatedOn', sql.DateTime, appointment.CreatedOn)
             .input ('ModifiedOn', sql.DateTime, appointment.ModifiedOn)
