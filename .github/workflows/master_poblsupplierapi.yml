@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'PoblSupplierApi'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_423A03D7A67645EEBC8271985EC7834C }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2FCBE1A5404D47E996AF85EB11B37110 }}
           package: .
