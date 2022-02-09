@@ -15,11 +15,10 @@ const getCancellations = async (req, res, next ) => {
            JobReference,
            DateTime,
            Status,
-           Note,
-           Outcome,
-           OutcomeNarrative
+           Note
        } = req.body
 
+       newCancellation.Direction = (Direction == null) ? "I" : Direction.toUpperCase(),
        newCancellation.CreatedOn = new Date().toISOString().slice(0, 19).replace('T', ' '),
        newCancellation.ModifiedOn = new Date().toISOString().slice(0, 19).replace('T', ' ')
 

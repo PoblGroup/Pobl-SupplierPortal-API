@@ -4,8 +4,7 @@ INSERT INTO [dbo].[Cancellations]
         [DateTime],
         [Status],
         [Note],
-        [Outcome],
-        [OutcomeNarrative],
+        [Direction],
         [CreatedOn],
         [ModifiedOn]
     )
@@ -15,8 +14,7 @@ VALUES
         @DateTime,
         @Status,
         @Note,
-        @Outcome,
-        @OutcomeNarrative,
+        @Direction,
         @CreatedOn,
         @ModifiedOn
     )

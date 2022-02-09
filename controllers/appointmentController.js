@@ -17,8 +17,6 @@ const createAppointment = async (req, res) => {
          SendSMS,
          Note,
          AppointmentOutcome,
-         Outcome,
-         OutcomeNarrative,
          ExternalReference
        } = req.body
 

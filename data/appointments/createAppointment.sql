@@ -5,8 +5,6 @@ INSERT INTO [dbo].[Appointments]
         [Note],
         [SendSMS],
         [AppointmentOutcome],
-        [Outcome],
-        [OutcomeNarrative],
         [ExternalReference],
         [CreatedOn],
         [ModifiedOn]
@@ -18,8 +16,6 @@ VALUES
         @Note,
         @SendSMS,
         @AppointmentOutcome,
-        @Outcome,
-        @OutcomeNarrative,
         @ExternalReference,
         @CreatedOn,
         @ModifiedOn

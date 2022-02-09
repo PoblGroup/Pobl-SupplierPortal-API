@@ -15,9 +15,7 @@ const createStage = async (req, res) => {
             JobReference,
             DateTime,
             Status,
-            Note,
-            Outcome,
-            OutcomeNarrative
+            Note
         } = req.body
 
         newStage.CreatedOn = new Date().toISOString().slice(0, 19).replace('T', ' '),

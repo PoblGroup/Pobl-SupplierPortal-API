@@ -4,8 +4,6 @@ INSERT INTO [dbo].[Stages]
         [DateTime],
         [Status],
         [Note],
-        [Outcome],
-        [OutcomeNarrative],
         [CreatedOn],
         [ModifiedOn]
     )
@@ -15,8 +13,6 @@ VALUES
         @DateTime,
         @Status,
         @Note,
-        @Outcome,
-        @OutcomeNarrative,
         @CreatedOn,
         @ModifiedOn
     )
