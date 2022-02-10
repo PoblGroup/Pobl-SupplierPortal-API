@@ -15,7 +15,8 @@ const getCancellations = async (req, res, next ) => {
            JobReference,
            DateTime,
            Status,
-           Note
+           Note, 
+           Direction
        } = req.body
 
        newCancellation.Direction = (Direction == null) ? "I" : Direction.toUpperCase(),
@@ -25,6 +26,8 @@ const getCancellations = async (req, res, next ) => {
        const created = await cancellationData.createCancellation(newCancellation)
        
        res.send(created)
+
+    // res.send(newCancellation)
 
    } catch (error) {
        res.status(400).send(error.message)
