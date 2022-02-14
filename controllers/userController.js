@@ -3,6 +3,15 @@ const userData = require('../data/users');
 const { registerValidation } = require('../helpers/validation');
 
 
+const getUser = async (req, res) => {
+    try {
+        const user = await userData.getUserById(req.params.id);
+        res.send(user)
+    } catch (error) {
+        res.status(400).send(error.message)
+    }
+}
+
 const getUsers = async (req, res) => {
     try {
         const users = await userData.getUsers();
@@ -29,10 +38,13 @@ const registerUser = async (req, res) => {
 
     // Create new user
     const newUser = {
+        FullName: req.body.FullName,
         Username: req.body.Username,
         Password: hashedPassword,
         Supplier_Id: req.body.Supplier_Id,
+        Status: req.body.Status,
         IsAdmin: req.body.IsAdmin,
+        Direction: req.body.Direction,
         CreatedOn: new Date().toISOString().slice(0, 19).replace('T', ' '),
         ModifiedOn: new Date().toISOString().slice(0, 19).replace('T', ' ')
     }
@@ -46,7 +58,51 @@ const registerUser = async (req, res) => {
    
 }
 
+const updateUser = async (req, res) => {
+    try {
+        // TODO: Validate request
+
+        // Get User
+        const user = await userData.getUserById(req.params.id);
+        if(!user) return res.send('No User Found')
+
+        // New User Details
+        const newUser = {
+            Id: user[0].Id,
+            FullName: req.body.FullName || user[0].FullName,
+            Username: req.body.Username || user[0].Username,
+            Supplier_Id: req.body.Supplier_Id || user[0].Supplier_Id,
+            Status: req.body.Status || user[0].Status,
+            IsAdmin: req.body.IsAdmin || user[0].IsAdmin,
+            Direction: req.body.Direction || user[0].Direction,
+            ModifiedOn: new Date().toISOString().slice(0, 19).replace('T', ' ')
+        }
+
+        // Hash New Password
+        if(req.body.Password) {
+            const salt = await bcrypt.genSalt(10)
+            newUser.Password = await bcrypt.hash(req.body.Password, salt)
+        } else {
+            newUser.Password = user[0].Password
+        }
+
+        // Send Update to db
+        const rowsAffected = await userData.updateUser(newUser)
+        if(rowsAffected.length > 0) {
+            res.status(200).send({
+                rowsAffected: rowsAffected[0],
+                message: `Updated User with Id: ${newUser.Id}`
+            })
+        }
+    } catch (error) {
+        res.status(400).send(error.message)
+    }
+}
+
+
 module.exports = {
     getUsers,
+    getUser,
+    updateUser,
     registerUser
 }
