@@ -14,6 +14,9 @@ const authorizeUser = async (req, res, next ) => {
     const user = await userData.getUserByEmail(Username);
     if(user.length == 0) return res.status(400).send('Username already in use.')
 
+    // Check if user is active - if not dont give access
+    if(user.Status == 1) return res.status(400).send('Inactive User')
+
     // Check Password
     const validPassword = await bcrypt.compare(Password, user[0].Password)
     if(!validPassword) return res.status(400).send('Invalid password')

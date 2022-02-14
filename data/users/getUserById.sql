@@ -12,4 +12,4 @@ SELECT
 FROM 
     [dbo].[Users]
 WHERE
-    Username = @Username
+    Id = @Id
