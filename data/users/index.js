@@ -69,7 +69,7 @@ const updateUser = async (user) => {
             .input ('Username', sql.NVarChar(50), user.Username)
             .input ('Password', sql.NVarChar(150), user.Password)
             .input ('Supplier_Id', sql.NVarChar(50), user.Supplier_Id)
-            .input ('Status', sql.Bit, user.Status)
+            .input ('Status', sql.Int, user.Status)
             .input ('IsAdmin', sql.Bit, user.IsAdmin)
             .input ('Direction', sql.NChar(1), user.Direction)
             .input ('ModifiedOn', sql.DateTime, user.ModifiedOn)
