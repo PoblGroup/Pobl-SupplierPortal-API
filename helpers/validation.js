@@ -6,7 +6,7 @@ const registerValidation = (user) => {
         Username: Joi.string().min(6).required().email(),
         Password: Joi.string().min(6).required(),
         Supplier_Id: Joi.optional(),
-        Status: Joi.bool().required(),
+        Status: Joi.number().required(),
         IsAdmin: Joi.bool().required(),
         Direction: Joi.optional()
     })
