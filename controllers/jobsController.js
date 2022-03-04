@@ -6,26 +6,9 @@ const { header } = require('express/lib/request');
 
 const getJobs = async (req, res) => {
     const { supplierId} = req.user
-    let supplierJobs = []
     try {
         const jobs = await jobData.getJobs(supplierId);
-
-        jobs.map(job => {
-
-            const jd = JSON.parse(CleanJsonString(job.JobDetails))
-
-            const j = {
-                Id: job.Id,
-                MaintenanceJobRef: job.MaintenanceJobRef,
-                SupplierId: job.SupplierId,
-                JobDetails: jd,
-                JobDesc: "TEST"
-            }
-            supplierJobs.push(j)
-        })  
-
-        console.log(supplierJobs)
-        res.json(supplierJobs)
+        res.json(jobs)
     } catch (error) {
         res.status(400).send(error.message)
     }
@@ -44,12 +27,18 @@ const getJobByRef = async (req, res) => {
 
 const createJob = async (req, res) => {
     const newJob = req.body
-    const file = req.file
-    uploadFileAzure(newJob, file)
+
+    newJob.direction = (req.body.direction == null) ? "I" : req.body.direction.toUpperCase(),
+    newJob.createdOn = new Date().toISOString().slice(0, 19).replace('T', ' '),
+    newJob.modifiedOn = new Date().toISOString().slice(0, 19).replace('T', ' ')
+
+    //TODO: File Upload
+    // const file = req.file
+    // uploadFileAzure(newJob, file)
 
     try {
         // Check to see if JobRef exists
-        const existingJob = await jobData.getJobByRef(newJob.createnanceJobRef)
+        const existingJob = await jobData.getJobByRef(newJob.maintenanceJobRef)
         if(existingJob.length > 0) return res.status(400).json({message: `Job with ${newJob.maintenanceJobRef} already exists`})
 
         // Create Job
@@ -57,7 +46,7 @@ const createJob = async (req, res) => {
         res.send(created)
 
     } catch (error) {
-        res.status(400).send(error.message)
+        res.status(500).send(error.message)
     }
 }
 
@@ -112,11 +101,6 @@ const uploadFileAzure = (job, file) => {
     // upload();
 }
 
-function CleanJsonString(jsonString) {
-    jsonString.replace(/\\n/g, '')
-    jsonString.replace(/\\t/g, '')
-    return jsonString
-}
 
 module.exports = {
     getJobs,
