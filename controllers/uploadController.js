@@ -13,7 +13,7 @@ const createJob = async (req, res) => {
                 message: `Job with ${newJob.maintenanceJobRef} already exists`
             })
         } else {
-            const created = await jobData.createJob(newJob)
+            const created = await jobData.createSupplierJob(newJob)
             res.send(created)
         }
     } catch (error) {

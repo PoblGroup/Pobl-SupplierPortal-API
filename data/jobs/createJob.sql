@@ -1,14 +1,40 @@
-INSERT INTO [dbo].[SupplierJobs]
-           (
-                [MaintenanceJobRef],
-                [SupplierId],
-                [JobDetails]
-           )
+INSERT INTO [dbo].[Jobs]
+(
+    [JobReference],
+    [SupplierId],
+    [JobExternalReference],
+    [WorkType],
+    [PropertyReference],
+    [OccupantReference],
+    [Description],
+    [AccessDetails],
+    [ReleaseDate],
+    [Priority],
+    [TargetApptDate],
+    [TargetCompleteDate],
+    [TotalValue],
+    [Direction],
+    [CreatedOn],
+    [ModifiedOn]
+)
 VALUES
-    (
-        @MaintenanceJobRef,
-        @SupplierId, 
-        @JobDetails
-    )
+(
+    @JobReference,
+    @SupplierId,
+    @JobExternalReference,
+    @WorkType,
+    @PropertyReference,
+    @OccupantReference,
+    @Description,
+    @AccessDetails,
+    @ReleaseDate,
+    @Priority,
+    @TargetApptDate,
+    @TargetCompleteDate,
+    @TotalValue,
+    @Direction,
+    @CreatedOn,
+    @ModifiedOn
+)
 
 SELECT SCOPE_IDENTITY() AS Id
