@@ -60,6 +60,8 @@ const registerUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
     try {
+        const { FullName, Username, Supplier_Id, Status, IsAdmin, Direction } = req.body
+
         // TODO: Validate request
 
         // Get User
@@ -69,12 +71,12 @@ const updateUser = async (req, res) => {
         // New User Details
         const newUser = {
             Id: user[0].Id,
-            FullName: req.body.FullName || user[0].FullName,
-            Username: req.body.Username || user[0].Username,
-            Supplier_Id: req.body.Supplier_Id || user[0].Supplier_Id,
-            Status: req.body.Status || user[0].Status,
-            IsAdmin: req.body.IsAdmin || user[0].IsAdmin,
-            Direction: req.body.Direction || user[0].Direction,
+            FullName: (FullName != null) ? FullName : user[0].FullName,
+            Username: (Username != null) ? Username : user[0].Username,
+            Supplier_Id: (Supplier_Id != null) ? Supplier_Id : user[0].Supplier_Id,
+            Status: (Status != null) ? Status : user[0].Status,
+            IsAdmin: (IsAdmin != null) ? IsAdmin : user[0].IsAdmin,
+            Direction: (Direction != null) ? Direction : user[0].Direction,
             ModifiedOn: new Date().toISOString().slice(0, 19).replace('T', ' ')
         }
 
