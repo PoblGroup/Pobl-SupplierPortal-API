@@ -1,9 +1,6 @@
 const jobData = require('../data/jobs')
 const productData = require('../data/products')
-const { DefaultAzureCredential } = require('@azure/identity');
-const { getContainerSasUri } = require('../helpers/generateSasToken');
-const { BlobServiceClient, StorageSharedKeyCredential } = require('@azure/storage-blob');
-const { header } = require('express/lib/request');
+const { SPAuth, UploadFile } = require('../helpers/sharepoint');
 
 const getJobs = async (req, res) => {
     const { supplierId} = req.user
@@ -27,91 +24,65 @@ const getJobByRef = async (req, res) => {
 }
 
 const createJob = async (req, res) => {
-    const newJob = req.body
+    const file = req.file
+    const newJob = JSON.parse(req.body.data)
+    let addedProducts = []
 
     newJob.direction = (req.body.direction == null) ? "I" : req.body.direction.toUpperCase(),
     newJob.createdOn = new Date().toISOString().slice(0, 19).replace('T', ' '),
     newJob.modifiedOn = new Date().toISOString().slice(0, 19).replace('T', ' ')
 
-    //TODO: File Upload
-    // const file = req.file
-    // uploadFileAzure(newJob, file)
-
     try {
         // Check to see if JobRef exists
-        const existingJob = await jobData.getJobByRef(newJob.maintenanceJobRef)
-        if(existingJob.length > 0) return res.status(400).json({message: `Job with ${newJob.maintenanceJobRef} already exists`})
+        const existingJob = await jobData.getJobByRef(newJob.jobReference)
+        if(existingJob.length > 0) return res.status(400).json({message: `Job with ${newJob.jobReference} already exists`})
 
         // Create Job
         const createdJob = await jobData.createJob(newJob)
-        // res.send(created)
 
-        // TODO: Create each job element attached
+        // Add Products
         if(newJob.products.length > 0) {
-            newJob.products.map(async (product) => {
-                const createdProduct = await productData.createProduct(product, createdJob[0].Id)
-                console.log(createdProduct)
-            })
+            addedProducts = await AddProducts(newJob.products, createdJob[0].Id)
         }
 
-        res.send("Testing Creation")
+        // Add Job Image
+        const uploaded = await Upload(file)
+
+        res.json({
+            createdJobId: createdJob[0].Id,
+            jobReference: newJob.jobReference,
+            jobExternalReference: newJob.jobExternalReference,
+            productsAdded: addedProducts.length
+        })
 
     } catch (error) {
         res.status(500).send(error.message)
     }
 }
 
-const uploadFileAzure = (job, file) => {
-    const account = "PoblConnect";
-    const defaultAzureCredential = new DefaultAzureCredential();
-    const blobServiceClient = new BlobServiceClient(`https://${account}.blob.core.windows.net`, defaultAzureCredential);
+async function Upload(file) {
+    const site = "https://pobl.sharepoint.com/sites/RMExchange"
+    // Get SharePoint Token
+    const tokenData = await SPAuth();
+    // TODO: Create Folder for Job
+    // Upload File to SharePoint
+    const fileUpload = await UploadFile(tokenData.access_token, file);
 
-    async function createContainer() {
-        // Create a container
-        const containerName = `newcontainer${new Date().getTime()}`;
-        const containerClient = blobServiceClient.getContainerClient(containerName);
-        const createContainerResponse = await containerClient.create();
-        console.log(`Create container ${containerName} successfully`, createContainerResponse.requestId);
+    const { Name, ServerRelativeUrl, UniqueId } = fileUpload.d;
+    return {
+        Name,
+        url: `${site}${ServerRelativeUrl}`,
+        UniqueId,
     }
-    
-    //createContainer();
-
-
-    // const account = "PoblConnect"
-    // const key = "+T6vzvaYVIjKbYF82FSyYdUsW/IcOVYtnu5pj+PoMPCvs/cjSHkDqVNjvx3f6N0ZxVLGS8mDj3OTZUCPA5D2wQ=="
-    // const containerName = "test"
-    // const storageSharedKeyCredential = new StorageSharedKeyCredential(account, key)
-    // const sas = getContainerSasUri(containerName, storageSharedKeyCredential, null)
-    // console.log('Token SAS', sas)
-    // console.log('?sv=2020-08-04&ss=b&srt=co&sp=ctfx&se=2022-02-15T21:55:29Z&st=2022-02-15T13:55:29Z&spr=https&sig=Y1cSXZ3oCo73RXuqLl%2Fl%2FnrlQe3nookgGzg42AfkFhk%3D')
-
-    // //sv=2020-10-02 & st=2022-02-15T13%3A56%3A07Z & se=2022-02-15T14%3A56%3A07Z & sr=c & sp=c & sig=XnQvhw918i6J82B14ObcE5ac6SsjExtCES40L08%2FkOY%3D
-    // //sv=2020-08-04 & ss=b&srt=co & sp=ctfx & se=2022-02-15T21:55:29Z & st=2022-02-15T13:55:29Z & spr=https & sig=Y1cSXZ3oCo73RXuqLl%2Fl%2FnrlQe3nookgGzg42AfkFhk%3D
-
-
-    // const blobServiceClient = new BlobServiceClient(`https://${account}.blob.core.windows.net?${sas}`);
-    // console.log(blobServiceClient)  
-
-    // async function upload() {
-    //     const containerClient = blobServiceClient.getContainerClient(containerName);
-        
-    //     const content = "Hello world!";
-    //     const blobName = "newblob" + new Date().getTime();
-    //     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-    //     const uploadBlobResponse = await blockBlobClient.upload(content, content.length);
-    //     console.log(`Upload block blob ${blobName} successfully`, uploadBlobResponse.requestId);
-  
-    //     // LIST BLOBS
-    //     // let i = 1;
-    //     // let blobs = containerClient.listBlobsFlat();
-    //     // for await (const blob of blobs) {
-    //     //   console.log(`Blob ${i++}: ${blob.name}`);
-    //     // }
-    // }
-
-    // upload();
 }
 
+async function AddProducts(products, id) {
+    const promises = products.map(async (product) => {
+        const p = await productData.createProduct(product, id)
+        return p[0].Id
+    })
+    return Promise.all(promises)
+}
 
 module.exports = {
     getJobs,

@@ -1,9 +1,5 @@
-SELECT 
-    [Id],
-    [MaintenanceJobRef],
-    [SupplierId],
-    [JobDetails]
+SELECT *
 FROM 
-    [dbo].[SupplierJobs]
+    [dbo].[Jobs]
 WHERE 
-    MaintenanceJobRef = @JobRef
+    JobReference = @JobRef
