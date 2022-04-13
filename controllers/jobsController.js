@@ -1,4 +1,5 @@
 const jobData = require('../data/jobs')
+const productData = require('../data/products')
 const { DefaultAzureCredential } = require('@azure/identity');
 const { getContainerSasUri } = require('../helpers/generateSasToken');
 const { BlobServiceClient, StorageSharedKeyCredential } = require('@azure/storage-blob');
@@ -42,8 +43,18 @@ const createJob = async (req, res) => {
         if(existingJob.length > 0) return res.status(400).json({message: `Job with ${newJob.maintenanceJobRef} already exists`})
 
         // Create Job
-        const created = await jobData.createJob(newJob)
-        res.send(created)
+        const createdJob = await jobData.createJob(newJob)
+        // res.send(created)
+
+        // TODO: Create each job element attached
+        if(newJob.products.length > 0) {
+            newJob.products.map(async (product) => {
+                const createdProduct = await productData.createProduct(product, createdJob[0].Id)
+                console.log(createdProduct)
+            })
+        }
+
+        res.send("Testing Creation")
 
     } catch (error) {
         res.status(500).send(error.message)
