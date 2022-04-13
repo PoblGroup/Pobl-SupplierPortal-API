@@ -80,10 +80,6 @@ const updateUser = async (user) => {
     }
 }
 
-
-
-
-
 module.exports = {
     getUsers,
     createUser, 
